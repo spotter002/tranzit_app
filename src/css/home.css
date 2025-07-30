@@ -1,0 +1,82 @@
+/* General Styles */
+body, html {
+  scroll-behavior: smooth;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.homepage {
+  background-color: #f8f9fa;
+  color: #212529;
+}
+
+/* Navbar */
+.navbar-brand {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.navbar-nav .nav-link {
+  transition: color 0.3s ease-in-out;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #00cc66 !important;
+}
+
+/* Hero Section */
+.hero {
+  position: relative;
+  height: 350px;
+  overflow: hidden;
+}
+
+.hero-content h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.hero .btn {
+  font-weight: bold;
+  padding: 10px 20px;
+}
+
+/* Cards */
+.card {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Section Headings */
+section h2 {
+  font-weight: 700;
+}
+
+/* Contact Button */
+#contact .btn {
+  font-size: 1.2rem;
+  padding: 12px 30px;
+  margin-top: 10px;
+}
+
+/* Footer */
+footer {
+  background-color: #1c1c1c;
+  color: #ddd;
+}
+
+/* Responsive Fixes */
+@media (max-width: 768px) {
+  .hero-content h1 {
+    font-size: 1.8rem;
+  }
+
+  .hero {
+    height: 280px;
+  }
+}
