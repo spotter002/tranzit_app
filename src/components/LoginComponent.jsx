@@ -29,6 +29,7 @@ const LoginComponent = () => {
     localStorage.setItem('token', token);
 
     const role = user.role.toLowerCase();
+    console.log(user.role.toLowerCase())
 
     alert(`Login successful! Redirecting to ${role}-dashboard...`);
     navigate(`/${role}-dashboard`);

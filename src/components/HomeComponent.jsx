@@ -42,10 +42,10 @@ const HomeComponent = () => {
       {/* Hero Section */}
       <section className="hero position-relative text-white">
         <img
-          src="images/truck-banner.jpg"
+          src="images/download.jpeg"
           alt="banner"
           className="w-100 img-fluid"
-          style={{ maxHeight: "350px", objectFit: "cover" }}
+          style={{ maxHeight: "450px", objectFit: "cover" }}
         />
         <div className="hero-content position-absolute top-50 start-50 translate-middle text-center bg-dark p-4 rounded bg-opacity-50">
           <h1>Move Anything, Anytime, Anywhere.</h1>
