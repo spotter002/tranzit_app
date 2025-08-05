@@ -13,6 +13,18 @@ import AdminDashboard from './components//admin/AdminDashboard';
 import NotAuthorized from './components/NotAuthorized';
 import NotFound from './components/NotFoundController';
 import HomeComponent from './components/HomeComponent';
+import ShipperLayout from './components/shipper/ShipperLayout';
+import ShipperDashboard from './components/shipper/ShipperDashboard';
+import DriverDasboard from './components/driver/DriverDasboard';
+import DriverLayout from './components/driver/DriverLayout';
+// Admin pages
+import Bid from './components/admin/Bid';
+import Deliveries from './components/admin/Deliveries';
+import Driver from './components/admin/Driver';
+import Shipper from './components/admin/Shipper';
+import Transactions from './components/admin/Transactions';
+import Wallet from './components/admin/Wallet';
+import Featured from './components/admin/Featured';
 
 // import NotAuthorized from './components/NotAuthorized';
 // import NotFound from './components/NotFoundController';
@@ -34,7 +46,32 @@ function App() {
         </ProtectedRoutes>}>
 
         <Route path='' element={<AdminDashboard/>} />
+        <Route path='bids' element={<Bid/>} />
+        <Route path='deliveries' element={<Deliveries/>} />
+        <Route path='drivers' element={<Driver/>} />
+        <Route path='featured' element={<Featured/>} />
+        <Route path='shippers' element={<Shipper/>} />
+        <Route path='transactions' element={<Transactions/>} />
+        <Route path='wallet' element={<Wallet/>} />
         </Route>
+
+        {/* shipper and admin protected routes */}
+        <Route path='shipper-dashboard' element={<ProtectedRoutes allowedRoles={['admin','shipper']}>
+          <ShipperLayout/>
+        </ProtectedRoutes>}>
+
+        <Route path='' element={<ShipperDashboard/>} />
+        </Route>
+
+
+        {/* driver and admin protected routes */}
+        <Route path='driver-dashboard' element={<ProtectedRoutes allowedRoles={['admin','driver']}>
+          <DriverLayout/>
+        </ProtectedRoutes>}>
+
+        <Route path='' element={<DriverDasboard/>} />
+        </Route>
+
 
         <Route path='/register' element={<RegisterComponent/>}/>
         <Route path='/login' element={<LoginComponent/>}/>

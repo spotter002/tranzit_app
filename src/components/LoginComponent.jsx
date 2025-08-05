@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import "../css/register.css";
+import  { useEffect } from 'react';
 import { FaEye, FaEyeSlash, FaGoogle, FaFacebook, FaXTwitter } from 'react-icons/fa6';
 
 const LoginComponent = () => {
@@ -20,25 +21,36 @@ const LoginComponent = () => {
     setError('');
     setLoading('Logging in...');
 
-    try {
-      const url = 'https://tranzit.onrender.com/user/Auth/login';
-      const response = await axios.post(url, { email, password });
+   try {
+  setError('');
+  setSuccess('');
+  setLoading('Logging in...');
 
-      setLoading('');
-      setSuccess('Login successful!');
+  const url = 'https://tranzit.onrender.com/user/Auth/login';
+  const response = await axios.post(url, { email, password });
 
-      const token = response.data.token;
-      const user = response.data.user;
-      localStorage.setItem('token', token);
+  const token = response?.data?.token || '';
+const user = response?.data?.user || null;
 
-      const role = user.role.toLowerCase();
-      alert(`Login successful! Redirecting to ${role}-dashboard...`);
-      navigate(`/${role}-dashboard`);
-    } catch (err) {
-      console.error(err.response?.data || err.message);
-      setError(err.response?.data?.message || 'Login failed');
-      setLoading('');
-    }
+if (!token || !user) {
+  console.error("Login response structure is unexpected:", response.data);
+  throw new Error('Malformed response from server');
+}
+
+  localStorage.setItem('token', token);
+
+  const role = user.role.toLowerCase();
+  console.log("The login role is",role);
+  setLoading('');
+  setSuccess('Login successful!');
+  alert(`Login successful! Redirecting to ${role}-dashboard...`);
+  navigate(`/${role}-dashboard`);
+} catch (err) {
+
+  setError(err.response?.data?.message || 'Login failed');
+  setLoading('');
+}
+
   };
 
   const handleSocialLogin = (provider) => {
@@ -46,8 +58,20 @@ const LoginComponent = () => {
     // Here you would integrate actual OAuth flow
   };
 
+  useEffect(() => {
+  let timer;
+  if (error || success) {
+    timer = setTimeout(() => {
+      setError('');
+      setSuccess('');
+    }, 4000); // 4 seconds
+  }
+  return () => clearTimeout(timer);
+}, [error, success]);
+
   return (
-    <div className="container mt-5 d-flex justify-content-center">
+    <div className="auth-background">
+      <div className="container mt-5 d-flex justify-content-center">
       <form
         className="card shadow text-light bg-primary bg-gradient p-4 rounded-4 border-0"
         style={{ maxWidth: '400px' }}
@@ -56,9 +80,18 @@ const LoginComponent = () => {
         <h1 className="text-center text-white fw-bold">Tranzit</h1>
         <h4 className="text-center mb-4">🔐 Login to your account</h4>
 
-        {error && <div className="alert alert-danger">{error}</div>}
-        {loading && <div className="alert alert-info">{loading}</div>}
-        {success && <div className="alert alert-success">{success}</div>}
+       {loading && !error && !success && (
+  <div className="alert alert-info">{loading}</div>
+)}
+
+{error && (
+  <div className="alert alert-danger">{error}</div>
+)}
+
+{success && (
+  <div className="alert alert-success">{success}</div>
+)}
+
 
         <div className="mb-3 input-group">
           <span className="input-group-text">📧</span>
@@ -118,6 +151,7 @@ const LoginComponent = () => {
           </p>
         </div>
       </form>
+    </div>
     </div>
   );
 };

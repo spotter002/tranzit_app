@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import "../css/register.css";
+import  { useEffect } from 'react';
 import { FaEye, FaEyeSlash, FaGoogle, FaBolt } from 'react-icons/fa6';
 
 const RegisterComponent = () => {
@@ -49,7 +51,8 @@ const RegisterComponent = () => {
   };
 
   return (
-    <div className='container mt-5' style={{ maxWidth: '400px' }}>
+    <div className="auth-background">
+      <div className='container mt-5' style={{ maxWidth: '400px' }}>
       <form className='card shadow text-light bg-primary bg-gradient p-4 rounded-4 border-0' onSubmit={handleSubmit}>
         <h1 className='text-center text-white fw-bold'>TRANZIT LOGISTICS</h1>
         <h4 className='text-center mb-4'>🚀 Register your account</h4>
@@ -150,6 +153,7 @@ const RegisterComponent = () => {
           <p className="text-white">Already have an account? <Link to="/login" className="text-warning text-decoration-none fw-bold">Login</Link></p>
         </div>
       </form>
+    </div>
     </div>
   );
 };

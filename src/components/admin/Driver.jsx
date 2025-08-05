@@ -1,0 +1,129 @@
+import React, { useContext, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
+
+const Drivers = () => {
+  const [drivers, setDrivers] = useState([]);
+  const { token } = useContext(AuthContext);
+
+  const authHeader = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+
+  const fetchDrivers = async () => {
+    try {
+      toast.info('Fetching drivers...');
+      const res = await axios.get('https://your-backend-url.com/driver', authHeader);
+      setDrivers(res.data);
+      toast.dismiss();
+      toast.success('Drivers fetched successfully');
+    } catch (error) {
+      toast.dismiss();
+      toast.error(error.response?.data?.message || 'Error fetching drivers');
+    }
+  };
+
+  useEffect(() => {
+    fetchDrivers();
+  }, []);
+
+  const handleDelete = async (id) => {
+    if (window.confirm('Delete this driver?')) {
+      try {
+        toast.warning('Deleting driver...');
+        await axios.delete(`https://your-backend-url.com/driver/${id}`, authHeader);
+        toast.dismiss();
+        toast.success('Driver deleted');
+        fetchDrivers(); // refresh list
+      } catch (error) {
+        toast.dismiss();
+        toast.error(error.response?.data?.message || 'Delete failed');
+      }
+    }
+  };
+
+  return (
+    <div className="container mt-2">
+      <ToastContainer position="top-right" autoClose={3000} />
+      <nav aria-label="breadcrumb" className="mb-3">
+        <ol className="breadcrumb">
+          <li className="breadcrumb-item fw-bold">
+            <Link to="/admin-dashboard">Dashboard</Link>
+          </li>
+          <li className="breadcrumb-item active fw-bold" aria-current="page">
+            Drivers
+          </li>
+        </ol>
+      </nav>
+
+      <div className="card p-4 shadow-sm">
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <h5 className="text-primary">
+            <i className="bi bi-truck me-2"></i>Driver List
+          </h5>
+          <button className="btn btn-primary">
+            <i className="bi bi-plus-circle me-2"></i>Add Driver
+          </button>
+        </div>
+
+        <div className="table-responsive">
+          {drivers.length === 0 ? (
+            <div className="alert alert-warning text-center">
+              <i className="bi bi-exclamation-triangle me-2"></i>No drivers found!
+            </div>
+          ) : (
+            <table className="table table-striped table-bordered table-hover">
+              <thead className="table-primary">
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Vehicle Type</th>
+                  <th>Plate Number</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {drivers.map((driver, index) => (
+                  <tr key={driver._id}>
+                    <td>{index + 1}</td>
+                    <td>{driver.name}</td>
+                    <td>{driver.email}</td>
+                    <td>{driver.phone}</td>
+                    <td>{driver.vehicleType}</td>
+                    <td>{driver.vehicleDetails?.plateNumber || 'N/A'}</td>
+                    <td>
+                      {driver.availableForJobs ? (
+                        <span className="badge bg-success">Available</span>
+                      ) : (
+                        <span className="badge bg-secondary">Unavailable</span>
+                      )}
+                    </td>
+                    <td>
+                      <button className="btn btn-sm btn-warning me-2">
+                        <i className="bi bi-pencil-square"></i> Edit
+                      </button>
+                      <button
+                        className="btn btn-sm btn-danger"
+                        onClick={() => handleDelete(driver._id)}
+                      >
+                        <i className="bi bi-trash"></i> Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Drivers;
