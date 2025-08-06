@@ -25,14 +25,19 @@ const SideBar = () => {
                     <i className='bi bi-journal-bookmark me-3'></i>Bid
                 </NavLink>
             </li>
-            <li className='nav-item mb-3'>
+            {/* <li className='nav-item mb-3'>
                 <NavLink to={'/admin-dashboard/deliveries'} end className={({isActive})=>isActive?'nav-link bg-success text-white fe-fold ':'nav-link text-light'}>
                     <i className='bi bi-person-lines-fill me-3'></i>Deliveries
                 </NavLink>
-            </li>
+            </li> */}
             <li className='nav-item mb-3'>
                 <NavLink to={'/admin-dashboard/featured'} end className={({isActive})=>isActive?'nav-link bg-success text-white fe-fold ':'nav-link text-light'}>
                     <i className='bi bi-person-badge me-3'></i>Featured
+                </NavLink>
+            </li>
+            <li className='nav-item mb-3'>
+                <NavLink to={'/admin-dashboard/drivers'} end className={({isActive})=>isActive?'nav-link bg-success text-white fe-fold ':'nav-link text-light'}>
+                    <i className='bi bi-people-fill me-3'></i>Drivers
                 </NavLink>
             </li>
             <li className='nav-item mb-3'>
@@ -48,11 +53,6 @@ const SideBar = () => {
             <li className='nav-item mb-3'>
                 <NavLink to={'/admin-dashboard/wallet'} end className={({isActive})=>isActive?'nav-link bg-success text-white fe-fold ':'nav-link text-light'}>
                     <i className='bi bi-people-fill me-3'></i>Wallets
-                </NavLink>
-            </li>
-            <li className='nav-item mb-3'>
-                <NavLink to={'/admin-dashboard/drivers'} end className={({isActive})=>isActive?'nav-link bg-success text-white fe-fold ':'nav-link text-light'}>
-                    <i className='bi bi-people-fill me-3'></i>Drivers
                 </NavLink>
             </li>
         </ul>

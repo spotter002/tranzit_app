@@ -1,13 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Drivers = () => {
   const [drivers, setDrivers] = useState([]);
   const { token } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const authHeader = {
     headers: { Authorization: `Bearer ${token}` },
@@ -16,10 +17,9 @@ const Drivers = () => {
   const fetchDrivers = async () => {
     try {
       toast.info('Fetching drivers...');
-      const res = await axios.get('https://your-backend-url.com/driver', authHeader);
+      const res = await axios.get('https://tranzit.onrender.com/driver/Auth/driver', authHeader);
       setDrivers(res.data);
       toast.dismiss();
-      toast.success('Drivers fetched successfully');
     } catch (error) {
       toast.dismiss();
       toast.error(error.response?.data?.message || 'Error fetching drivers');
@@ -31,13 +31,13 @@ const Drivers = () => {
   }, []);
 
   const handleDelete = async (id) => {
-    if (window.confirm('Delete this driver?')) {
+    if (window.confirm('Are you sure you want to delete this driver?')) {
       try {
         toast.warning('Deleting driver...');
-        await axios.delete(`https://your-backend-url.com/driver/${id}`, authHeader);
+        await axios.delete(`https://tranzit.onrender.com/driver/Auth/driver/${id}`, authHeader);
         toast.dismiss();
         toast.success('Driver deleted');
-        fetchDrivers(); // refresh list
+        fetchDrivers();
       } catch (error) {
         toast.dismiss();
         toast.error(error.response?.data?.message || 'Delete failed');
@@ -45,26 +45,25 @@ const Drivers = () => {
     }
   };
 
+const handleEdit = (driverData) => {
+  navigate('/admin-dashboard/drivers/edit', { state: {driverData} });
+};
+
+
   return (
     <div className="container mt-2">
       <ToastContainer position="top-right" autoClose={3000} />
       <nav aria-label="breadcrumb" className="mb-3">
         <ol className="breadcrumb">
-          <li className="breadcrumb-item fw-bold">
-            <Link to="/admin-dashboard">Dashboard</Link>
-          </li>
-          <li className="breadcrumb-item active fw-bold" aria-current="page">
-            Drivers
-          </li>
+          <li className="breadcrumb-item fw-bold"><Link to="/admin-dashboard">Dashboard</Link></li>
+          <li className="breadcrumb-item active fw-bold" aria-current="page">Drivers</li>
         </ol>
       </nav>
 
       <div className="card p-4 shadow-sm">
         <div className="d-flex justify-content-between align-items-center mb-3">
-          <h5 className="text-primary">
-            <i className="bi bi-truck me-2"></i>Driver List
-          </h5>
-          <button className="btn btn-primary">
+          <h5 className="text-primary"><i className="bi bi-truck me-2"></i>Driver List</h5>
+          <button className="btn btn-primary" onClick={() => navigate('/admin-dashboard/drivers/add')}>
             <i className="bi bi-plus-circle me-2"></i>Add Driver
           </button>
         </div>
@@ -105,13 +104,10 @@ const Drivers = () => {
                       )}
                     </td>
                     <td>
-                      <button className="btn btn-sm btn-warning me-2">
+                      <button className="btn btn-sm btn-warning me-2" onClick={() => handleEdit(driver)}>
                         <i className="bi bi-pencil-square"></i> Edit
                       </button>
-                      <button
-                        className="btn btn-sm btn-danger"
-                        onClick={() => handleDelete(driver._id)}
-                      >
+                      <button className="btn btn-sm btn-danger" onClick={() => handleDelete(driver._id)}>
                         <i className="bi bi-trash"></i> Delete
                       </button>
                     </td>

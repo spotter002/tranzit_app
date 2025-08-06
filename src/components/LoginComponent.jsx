@@ -30,16 +30,20 @@ const LoginComponent = () => {
   const response = await axios.post(url, { email, password });
 
   const token = response?.data?.token || '';
-const user = response?.data?.user || null;
+  const user = response?.data?.user || null;
+
+console.log("The login response is",response.data);
 
 if (!token || !user) {
   console.error("Login response structure is unexpected:", response.data);
   throw new Error('Malformed response from server');
 }
 
-  localStorage.setItem('token', token);
+  localStorage.setItem('token',token)
+  localStorage.setItem('user',JSON.stringify(user))
 
   const role = user.role.toLowerCase();
+
   console.log("The login role is",role);
   setLoading('');
   setSuccess('Login successful!');
@@ -51,7 +55,7 @@ if (!token || !user) {
   setLoading('');
 }
 
-  };
+};
 
   const handleSocialLogin = (provider) => {
     alert(`Social login with ${provider} coming soon! 🚀`);

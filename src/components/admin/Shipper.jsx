@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -8,7 +8,7 @@ import axios from 'axios';
 const Shippers = () => {
   const [shippers, setShippers] = useState([]);
   const { token } = useContext(AuthContext);
-
+  const navigate = useNavigate();
   const authHeader = {
     headers: { Authorization: `Bearer ${token}` }
   };
@@ -25,6 +25,10 @@ const Shippers = () => {
       toast.error(err.response?.data?.message || 'Error loading shippers');
     }
   };
+   useEffect(() => {
+    fetchShippers();
+  }, []);
+
 
   const handleDelete = async (id) => {
     if (window.confirm('Delete this shipper?')) {
@@ -41,10 +45,7 @@ const Shippers = () => {
     }
   };
 
-  useEffect(() => {
-    fetchShippers();
-  }, []);
-
+ 
   return (
     <div className="container mt-2">
       <ToastContainer position="top-right" autoClose={3000} />
@@ -61,7 +62,7 @@ const Shippers = () => {
           <h5 className="text-info">
             <i className="bi bi-person-workspace me-2"></i>Shippers List
           </h5>
-          <button className="btn btn-info">
+          <button className="btn btn-info" onClick={() => navigate('/admin-dashboard/shippers/add')}>
             <i className="bi bi-plus-circle me-2"></i>Add Shipper
           </button>
         </div>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import "../css/register.css";
 import  { useEffect } from 'react';
@@ -8,6 +8,7 @@ import { FaEye, FaEyeSlash, FaGoogle, FaBolt } from 'react-icons/fa6';
 const RegisterComponent = () => {
   const [role, setRole] = useState('admin');
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -32,23 +33,26 @@ const RegisterComponent = () => {
     setFormData({ ...formData, password: newPassword });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const url = role === 'driver' ? '/api/register-driver' :
-                  role === 'shipper' ? '/api/register-shipper' :
-                  '/api/register-admin';
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const dataToSend = { ...formData, role };
 
-      const dataToSend = { ...formData };
-      if (role === 'shipper') delete dataToSend.password;
+    // Remove password if registering a shipper (according to your old logic)
+    if (role === 'shipper') delete dataToSend.password;
 
-      await axios.post(url, dataToSend);
-      alert('Registration successful');
-    } catch (error) {
-      console.error(error.response?.data || error.message);
-      alert(error.response?.data?.message || 'Registration failed');
-    }
-  };
+    const response = await axios.post(
+      'https://tranzit.onrender.com/user/Auth/register',
+      dataToSend
+    );
+    alert('Registration successful Redirecting to login...');
+    navigate('/login');
+  } catch (error) {
+    console.error(error.response?.data || error.message);
+    alert(error.response?.data?.message || 'Registration failed');
+  }
+};
+
 
   return (
     <div className="auth-background">

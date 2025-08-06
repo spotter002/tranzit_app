@@ -25,6 +25,11 @@ import Shipper from './components/admin/Shipper';
 import Transactions from './components/admin/Transactions';
 import Wallet from './components/admin/Wallet';
 import Featured from './components/admin/Featured';
+import AddDriver from './components/admin/forms/DriverAdd';
+import EditDriver from './components/admin/forms/DriverEdit';
+import EditShipper from './components/admin/forms/shipperEdit';
+// import AddShipper from './components/admin/forms/shipperAdd';
+import ShipperAdd from './components/admin/forms/ShipperAdd';
 
 // import NotAuthorized from './components/NotAuthorized';
 // import NotFound from './components/NotFoundController';
@@ -48,9 +53,19 @@ function App() {
         <Route path='' element={<AdminDashboard/>} />
         <Route path='bids' element={<Bid/>} />
         <Route path='deliveries' element={<Deliveries/>} />
-        <Route path='drivers' element={<Driver/>} />
+
+        
+          <Route path='drivers' element={<Driver/>} />
+         <Route path='drivers/add' element={<AddDriver/>} />
+          <Route path='drivers/edit' element={<EditDriver/>} />
+
         <Route path='featured' element={<Featured/>} />
+
+        
         <Route path='shippers' element={<Shipper/>} />
+        <Route path='shippers/add' element={<ShipperAdd/>} />
+        <Route path='shippers/edit' element={<EditShipper/>} />
+
         <Route path='transactions' element={<Transactions/>} />
         <Route path='wallet' element={<Wallet/>} />
         </Route>
