@@ -30,6 +30,8 @@ import EditDriver from './components/admin/forms/DriverEdit';
 import EditShipper from './components/admin/forms/shipperEdit';
 // import AddShipper from './components/admin/forms/shipperAdd';
 import ShipperAdd from './components/admin/forms/ShipperAdd';
+import DriverCard from './components/admin/DriverCard';
+import WalletPayment from './components/WalletPayment';
 
 // import NotAuthorized from './components/NotAuthorized';
 // import NotFound from './components/NotFoundController';
@@ -90,6 +92,9 @@ function App() {
 
         <Route path='/register' element={<RegisterComponent/>}/>
         <Route path='/login' element={<LoginComponent/>}/>
+       <Route path='/walletPayment' element={<WalletPayment/>}/>
+       <Route path='/transactions' element={<Transactions/>}/>
+        {/* <Route path='/forgot-password' element={<ForgotPasswordComponent/>}/> */}
         {/* default routes */}
         <Route path='/not-authorized' element={<NotAuthorized/>}/>
         <Route path='*' element={<NotFound/>} />

@@ -4,7 +4,7 @@ import { AuthContext } from '../../context/AuthContext';
 import { toast, ToastContainer } from 'react-toastify';
 import axios from 'axios';
 import 'react-toastify/dist/ReactToastify.css';
-
+import DriverCard from './DriverCard';
 const Drivers = () => {
   const [drivers, setDrivers] = useState([]);
   const { token } = useContext(AuthContext);
@@ -67,54 +67,20 @@ const handleEdit = (driverData) => {
             <i className="bi bi-plus-circle me-2"></i>Add Driver
           </button>
         </div>
-
-        <div className="table-responsive">
+        <div className="d-flex flex-wrap justify-content-start">
           {drivers.length === 0 ? (
-            <div className="alert alert-warning text-center">
+            <div className="alert alert-warning text-center w-100">
               <i className="bi bi-exclamation-triangle me-2"></i>No drivers found!
             </div>
           ) : (
-            <table className="table table-striped table-bordered table-hover">
-              <thead className="table-primary">
-                <tr>
-                  <th>#</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Phone</th>
-                  <th>Vehicle Type</th>
-                  <th>Plate Number</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {drivers.map((driver, index) => (
-                  <tr key={driver._id}>
-                    <td>{index + 1}</td>
-                    <td>{driver.name}</td>
-                    <td>{driver.email}</td>
-                    <td>{driver.phone}</td>
-                    <td>{driver.vehicleType}</td>
-                    <td>{driver.vehicleDetails?.plateNumber || 'N/A'}</td>
-                    <td>
-                      {driver.availableForJobs ? (
-                        <span className="badge bg-success">Available</span>
-                      ) : (
-                        <span className="badge bg-secondary">Unavailable</span>
-                      )}
-                    </td>
-                    <td>
-                      <button className="btn btn-sm btn-warning me-2" onClick={() => handleEdit(driver)}>
-                        <i className="bi bi-pencil-square"></i> Edit
-                      </button>
-                      <button className="btn btn-sm btn-danger" onClick={() => handleDelete(driver._id)}>
-                        <i className="bi bi-trash"></i> Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            drivers.map(driver => (
+              <DriverCard
+                key={driver._id}
+                driver={driver}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
+            ))
           )}
         </div>
       </div>
