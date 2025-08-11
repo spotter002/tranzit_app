@@ -1,34 +1,74 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import { NavLink } from 'react-router-dom';
+import { FaBars } from 'react-icons/fa6';
 
-const ShipperSidebar = () => {
-  const { pathname } = useLocation();
+const SideBar = () => {
+  const [collapsed, setCollapsed] = useState(false);
 
-  const links = [
-    { label: 'Dashboard', to: '/shipper/dashboard', icon: '📦' },
-    { label: 'My Deliveries', to: '/shipper/deliveries', icon: '🚚' },
-    { label: 'Wallet', to: '/shipper/wallet', icon: '💰' },
-    { label: 'Settings', to: '/shipper/settings', icon: '⚙️' },
-  ];
+  const toggleSidebar = () => {
+    setCollapsed(!collapsed);
+  };
 
   return (
-    <div className="bg-dark text-light p-3 vh-100" style={{width:'200px',background:'linear-gradient(135deg, rgb(12,79,46), rgb(54,66,159))'}
-    }>
-      <h4 className="mb-4">📦 Shipper Panel</h4>
-      <ul className="nav flex-column">
-        {links.map((link) => (
-          <li className="nav-item" key={link.to}>
-            <Link
-              to={link.to}
-              className={`nav-link text-light ${pathname === link.to ? 'bg-secondary rounded' : ''}`}
-            >
-              {link.icon} {link.label}
-            </Link>
-          </li>
-        ))}
-      </ul>
+    <div
+      className='text-light d-flex flex-column p-3'
+      style={{
+        width: collapsed ? '50px' : '120px',
+        overflow: 'auto',
+        background: 'linear-gradient(135deg, rgb(12,79,46), rgb(54,66,159))',
+        transition: 'width 0.3s',
+        height: '100vh'
+      }}
+    >
+      <div className='d-flex align-items-center justify-content-between mb-4'>
+        <h3 className='m-0' style={{ fontSize: collapsed ? '1rem' : '1.25rem' }}>Admin Panel</h3>
+        <button
+          className='btn btn-sm btn-outline-light ms-2'
+          onClick={toggleSidebar}
+          style={{ fontSize: '0.6rem' }}
+        >
+          <FaBars />
+        </button>
+      </div>
+      <NavLink to='/admin-dashboard' className='text-light mb-3' style={{ textDecoration: 'none' }}>
+        <i className='bi bi-speedometer2 me-2'></i>
+        {!collapsed && 'Dashboard'}
+      </NavLink>
+      <NavLink to='/admin-dashboard/shippers' className='text-light mb-3' style={{ textDecoration: 'none' }}>
+        <i className='bi bi-truck me-2'></i>
+        {!collapsed && 'Shippers'}
+      </NavLink>
+      <NavLink to='/admin-dashboard/drivers' className='text-light mb-3' style={{ textDecoration: 'none' }}>
+        <i className='bi bi-truck-front-fill me-2'></i>
+        {!collapsed && 'Drivers'}
+      </NavLink>
+      <NavLink to='/admin-dashboard/featured' className='text-light mb-3' style={{ textDecoration: 'none' }}>
+        <i className='bi bi-person-lines-fill me-2'></i>
+        {!collapsed && 'Featured Drivers'}
+      </NavLink>
+      <NavLink to='/admin-dashboard/bids' className='text-light mb-3' style={{ textDecoration: 'none' }}>
+        <i className='bi bi-easel2-fill me-2'></i>
+        {!collapsed && 'Bids'}
+      </NavLink>
+      <NavLink to='/admin-dashboard/transactions' className='text-light mb-3' style={{ textDecoration: 'none' }}>
+        <i className='bi bi-people-fill me-2'></i>
+        {!collapsed && 'Transactions'}
+      </NavLink>
+      <NavLink to='/admin-dashboard/wallet' className='text-light mb-3' style={{ textDecoration: 'none' }}>
+        <i className='bi bi-truck-front-fill me-2'></i>
+        {!collapsed && 'Wallets'}
+      </NavLink>
+      <NavLink to='/walletPayment' className='text-light mb-3' style={{ textDecoration: 'none' }}>
+        <i className='bi bi-truck-front-fill me-2'></i>
+        {!collapsed && 'payment'}
+      </NavLink>
+      <NavLink to='/transactions' className='text-light mb-3' style={{ textDecoration: 'none' }}>
+        <i className='bi bi-truck-front-fill me-2'></i>
+        {!collapsed && 'transactions'}
+      </NavLink>
+      
     </div>
   );
 };
 
-export default ShipperSidebar;
+export default SideBar;

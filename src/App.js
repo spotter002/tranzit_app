@@ -23,7 +23,7 @@ import Deliveries from './components/admin/Deliveries';
 import Driver from './components/admin/Driver';
 import Shipper from './components/admin/Shipper';
 import Transactions from './components/admin/Transactions';
-import Wallet from './components/admin/Wallet';
+import Wallet from './components/CreateWallet';
 import Featured from './components/admin/Featured';
 import AddDriver from './components/admin/forms/DriverAdd';
 import EditDriver from './components/admin/forms/DriverEdit';
@@ -32,6 +32,7 @@ import EditShipper from './components/admin/forms/shipperEdit';
 import ShipperAdd from './components/admin/forms/ShipperAdd';
 import DriverCard from './components/admin/DriverCard';
 import WalletPayment from './components/WalletPayment';
+import CreateWallet from './components/CreateWallet';
 
 // import NotAuthorized from './components/NotAuthorized';
 // import NotFound from './components/NotFoundController';
@@ -78,6 +79,8 @@ function App() {
         </ProtectedRoutes>}>
 
         <Route path='' element={<ShipperDashboard/>} />
+        <Route path='transactions' element={<Transactions/>} />
+        <Route path='wallet' element={<Wallet/>} />
         </Route>
 
 
@@ -87,6 +90,8 @@ function App() {
         </ProtectedRoutes>}>
 
         <Route path='' element={<DriverDasboard/>} />
+        <Route path='transactions' element={<Transactions/>} />
+        <Route path='wallet' element={<Wallet/>} />
         </Route>
 
 
@@ -94,10 +99,13 @@ function App() {
         <Route path='/login' element={<LoginComponent/>}/>
        <Route path='/walletPayment' element={<WalletPayment/>}/>
        <Route path='/transactions' element={<Transactions/>}/>
+       <Route path='create-wallet' element={<CreateWallet/>} />
+
         {/* <Route path='/forgot-password' element={<ForgotPasswordComponent/>}/> */}
         {/* default routes */}
         <Route path='/not-authorized' element={<NotAuthorized/>}/>
         <Route path='*' element={<NotFound/>} />
+
 
         </Routes>
       </AuthProvider>

@@ -13,7 +13,8 @@ const SideBar = () => {
     <div
       className='text-light d-flex flex-column p-3'
       style={{
-        width: collapsed ? '70px' : '150px',
+        width: collapsed ? '50px' : '120px',
+        overflow: 'auto',
         background: 'linear-gradient(135deg, rgb(12,79,46), rgb(54,66,159))',
         transition: 'width 0.3s',
         height: '100vh'

@@ -5,25 +5,35 @@ import {
   CategoryScale,
   LinearScale,
   BarElement,
-  PointElement,
-  LineElement,
   Title,
   Tooltip,
   Legend,
+  Chart,
+  Filler,
+  LineController,
+  LineElement,
+  PointElement
 } from 'chart.js';
 import { Bar, Line } from 'react-chartjs-2';
 
 // Register ChartJS components
 ChartJS.register(
   CategoryScale,
+  Filler,
+  LineController,
+  LineElement,
+  PointElement,
   LinearScale,
+  Title,
   BarElement,
   PointElement,
   LineElement,
   Title,
   Tooltip,
   Legend
+  
 );
+
 
 // Stat card component with icon, color, title, and value
 const StatCard = ({ title, value, color, icon }) => (
