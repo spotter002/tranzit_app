@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { FaUserEdit } from 'react-icons/fa';
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -13,9 +16,8 @@ import {
   LineElement,
   PointElement
 } from 'chart.js';
-import { Bar, Line } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 
-// Register ChartJS components
 ChartJS.register(
   CategoryScale,
   Filler,
@@ -29,7 +31,6 @@ ChartJS.register(
   Legend
 );
 
-// Stat Card component
 const StatCard = ({ title, value, color, icon }) => (
   <div className="col-md-4 mb-3">
     <div className={`card text-bg-${color} shadow-sm`}>
@@ -44,8 +45,8 @@ const StatCard = ({ title, value, color, icon }) => (
   </div>
 );
 
-// Recent List component
-const RecentList = ({ title, items, renderItem }) => (
+// Ensure items is always an array to avoid errors
+const RecentList = ({ title, items = [], renderItem }) => (
   <div className="card mb-4 shadow-sm h-100">
     <div className="card-header bg-primary text-white">{title}</div>
     <ul className="list-group list-group-flush">
@@ -62,17 +63,18 @@ const RecentList = ({ title, items, renderItem }) => (
   </div>
 );
 
-const DriverDashboard = () => {
+const DriverDashboard = ({ collapsed }) => {
   const [data, setData] = useState(null);
   const [driver, setDriver] = useState(null);
   const [loading, setLoading] = useState('Loading dashboard...');
   const [error, setError] = useState('');
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     const driverId = user._id;
-    console.log('Driver ID:', driverId);
 
     if (!driverId) {
       setError('Driver ID not found. Please login again.');
@@ -80,7 +82,6 @@ const DriverDashboard = () => {
       return;
     }
 
-    // Fetch dashboard data (summary, earnings, jobs, ratings, transactions)
     axios.get('https://tranzit.onrender.com/dashboard/Auth/driver', {
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -93,12 +94,10 @@ const DriverDashboard = () => {
         setLoading('');
       });
 
-    // Fetch specific driver data by ID
-    axios.get(`https://tranzit.onrender.com/driver/${driverId}`, {
+    axios.get(`https://tranzit.onrender.com/driver/Auth/driver/${driverId}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
-        console.log('Driver details API response:', res.data);
         setDriver(res.data);
         setLoading('');
       })
@@ -106,14 +105,18 @@ const DriverDashboard = () => {
         setError('Failed to load driver details');
         setLoading('');
       });
-
   }, []);
+
+  const handleUpdateClick = () => {
+    if (driver) {
+      navigate('/driver-dashboard/update-Account', { state: { driverData: driver } });
+    }
+  };
 
   if (loading) return <div className="alert alert-info mt-4">{loading}</div>;
   if (error) return <div className="alert alert-danger mt-4">{error}</div>;
   if (!data || !driver) return null;
 
-  // Chart Data
   const monthlyLabels = (data.monthlyEarnings || [])
     .map(m => `${m._id.month}/${m._id.year}`)
     .reverse();
@@ -133,27 +136,50 @@ const DriverDashboard = () => {
     ]
   };
 
+  const iconColors = {
+    update: '#4dabf7'
+  };
+
+  const linkStyle = {
+    textDecoration: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    marginBottom: '18px',
+    padding: '8px',
+    borderRadius: '8px',
+    transition: 'background 0.2s'
+  };
+
   return (
     <div className="container my-4">
       <h2 className="mb-4 text-primary">🚚 Driver Dashboard</h2>
 
       <div className="card mb-4 shadow-sm p-3 text-muted">
         <h5 className="mb-3">Driver Details</h5>
-        <p><strong>Name:</strong> {driver?.name || 'N/A'}</p>
-        <p><strong>Email:</strong> {driver?.email || 'N/A'}</p>
-        <p><strong>Phone:</strong> {driver?.phone || 'N/A'}</p>
-        <p><strong>Vehicle Type:</strong> {driver?.vehicleType || 'N/A'}</p>
-        <p><strong>Plate Number:</strong> {driver?.vehicleDetails?.plateNumber || 'N/A'}</p>
-        <p><strong>Model:</strong> {driver?.vehicleDetails?.model || 'N/A'}</p>
-        <p><strong>Capacity (kg):</strong> {driver?.vehicleDetails?.capacityKg || 'N/A'}</p>
-        <p><strong>ID Number:</strong> {driver?.idNumber || 'N/A'}</p>
-        <p><strong>License Number:</strong> {driver?.vehicleDetails?.licenseNumber || 'N/A'}</p>
-        <p><strong>Verified Driver:</strong> {driver?.isverifiedDriver ? 'Yes' : 'No'}</p>
-        <p><strong>Premium Driver:</strong> {driver?.isPremium ? 'Yes' : 'No'}</p>
-        <p><strong>Available for Jobs:</strong> {driver?.availableForJobs ? 'Yes' : 'No'}</p>
+        <p><strong>Name:</strong> {driver.name}</p>
+        <p><strong>Email:</strong> {driver.email}</p>
+        <p><strong>Phone:</strong> {driver.phone}</p>
+        <p><strong>Vehicle Type:</strong> {driver.vehicleType}</p>
+        <p><strong>Plate Number:</strong> {driver.vehicleDetails?.plateNumber || 'N/A'}</p>
+        <p><strong>Model:</strong> {driver.vehicleDetails?.model || 'N/A'}</p>
+        <p><strong>Capacity (kg):</strong> {driver.vehicleDetails?.capacityKg || 'N/A'}</p>
+        <p><strong>ID Number:</strong> {driver.idNumber}</p>
+        <p><strong>License Number:</strong> {driver.licenseNumber || 'N/A'}</p>
+        <p><strong>Verified Driver:</strong> {driver.isVerifiedDriver ? 'Yes' : 'No'}</p>
+        <p><strong>Premium Driver:</strong> {driver.isPremium ? 'Yes' : 'No'}</p>
+        <p><strong>Available for Jobs:</strong> {driver.availableForJobs ? 'Yes' : 'No'}</p>
+
+        <button
+          type="button"
+          style={linkStyle}
+          className="btn btn-primary d-flex align-items-center"
+          onClick={handleUpdateClick}
+        >
+          <FaUserEdit color={iconColors.update} size={18} className="me-2" />
+          {!collapsed && 'Update Driver'}
+        </button>
       </div>
 
-      {/* Earnings */}
       <div className="row">
         <h2>Earnings</h2>
         <StatCard title="Wallet Balance" value={`KSh ${data.walletBalance.toLocaleString()}`} color="success" icon="bi-wallet2" />
@@ -163,7 +189,6 @@ const DriverDashboard = () => {
         <StatCard title="Total Earnings" value={`KSh ${data.earnings.total.toLocaleString()}`} color="secondary" icon="bi-graph-up" />
       </div>
 
-      {/* Jobs */}
       <h2>Jobs</h2>
       <div className="row mt-4">
         <StatCard title="Pending Jobs" value={data.jobs.pending} color="danger" icon="bi-hourglass-split" />
@@ -172,40 +197,52 @@ const DriverDashboard = () => {
         <StatCard title="Cancelled" value={data.jobs.cancelled} color="secondary" icon="bi-x-circle" />
       </div>
 
-      {/* Ratings */}
       <h2>Ratings</h2>
       <div className="row mt-4">
         <StatCard title="Average Rating" value={data.ratings.average} color="info" icon="bi-star-fill" />
         <StatCard title="Total Reviews" value={data.ratings.totalReviews} color="primary" icon="bi-chat-square-text" />
       </div>
 
-      {/* Monthly Earnings Chart */}
       <h2>Monthly Earnings</h2>
       <div className="row mt-5">
         <div className="col-lg-12 mb-4">
           <div className="card shadow-sm p-3">
             <h5>📈 Monthly Earnings</h5>
-            <Line data={monthlyEarningsData} options={{ responsive: true, plugins: { legend: { position: 'top' } } }} />
+            <Line
+              data={monthlyEarningsData}
+              options={{
+                responsive: true,
+                plugins: {
+                  legend: { position: 'top' }
+                }
+              }}
+            />
           </div>
         </div>
       </div>
 
-      {/* Recent Transactions */}
       <h2>Recent Transactions</h2>
-      <div className="row g-4">
+      <div className="row mt-4">
         <div className="col-md-6">
           <RecentList
-            title="Recent Transactions"
-            items={data.recentTransactions}
-            renderItem={t => `${t.type.toUpperCase()} - KSh ${t.amount.toLocaleString()} (${new Date(t.createdAt).toLocaleDateString()})`}
+            title="Recent Jobs"
+            items={data.recentJobs}
+            renderItem={(job) => (
+              <>
+                <strong>{job.clientName}</strong> - {job.status} - <span className="text-success">KSh {job.amount.toLocaleString()}</span>
+              </>
+            )}
           />
         </div>
-
         <div className="col-md-6">
           <RecentList
-            title="Recent Deliveries"
-            items={data.recentDeliveries}
-            renderItem={d => `${d.shipper?.name || 'Unknown'} - ${d.status} (${new Date(d.createdAt).toLocaleDateString()})`}
+            title="Recent Payments"
+            items={data.recentPayments}
+            renderItem={(payment) => (
+              <>
+                <strong>{payment.method}</strong> - <span className="text-success">KSh {payment.amount.toLocaleString()}</span>
+              </>
+            )}
           />
         </div>
       </div>

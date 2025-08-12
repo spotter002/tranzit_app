@@ -1,17 +1,16 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { AuthContext } from '../../context/AuthContext'  // fixed path
-import { toast, ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-import axios from 'axios'
-import { Link, useNavigate } from 'react-router-dom'
+import React, { useContext, useEffect, useState } from 'react';
+import { AuthContext } from '../../context/AuthContext';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 const UpdateAccount = () => {
   const { token } = useContext(AuthContext);
   const navigate = useNavigate();
+  const location = useLocation();
+  const selectedDriver = location.state?.driverData;
 
-  const [loading, setLoading] = useState(true);
-
-  // All your fields:
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -26,40 +25,27 @@ const UpdateAccount = () => {
   const [plateNumber, setPlateNumber] = useState('');
   const [isPremium, setIsPremium] = useState(false);
 
-  const authHeader = {
-    headers: { Authorization: `Bearer ${token}` },
-  };
-
-  // Fetch logged-in driver profile on mount
   useEffect(() => {
-    const fetchDriver = async () => {
-      try {
-        const res = await axios.get('https://tranzit.onrender.com/driver/Auth/profile', authHeader);
-        const driver = res.data;
-        
-        setName(driver.name || '');
-        setEmail(driver.email || '');
-        setPhone(driver.phone || '');
-        setIsPremium(driver.isPremium || false);
-        setVehicleType(driver.vehicleType || '');
-        setPlateNumber(driver.vehicleDetails?.plateNumber || '');
-        setLicenseNumber(driver.vehicleDetails?.licenseNumber || '');
-        setidNumber(driver.idNumber || '');
-        setCapacityKg(driver.vehicleDetails?.capacityKg || '');
-        setModel(driver.vehicleDetails?.model || '');
-        setIsVerifiedDriver(driver.isverifiedDriver ?? true);
-        setAvailableForJobs(driver.availableForJobs || true);
-        setPhoto(driver.photo || '');
+    if (!selectedDriver) {
+      toast.error('Driver data not found. Redirecting...');
+      setTimeout(() => navigate('/driver-dashboard'), 2000);
+      return;
+    }
 
-        setLoading(false);
-      } catch (error) {
-        toast.error('Failed to load driver data. Please login again.');
-        navigate('/login'); // Redirect to login or wherever makes sense
-      }
-    };
-
-    fetchDriver();
-  }, [authHeader, navigate]);
+    setName(selectedDriver.name || '');
+    setEmail(selectedDriver.email || '');
+    setPhone(selectedDriver.phone || '');
+    setIsPremium(selectedDriver.isPremium || false);
+    setVehicleType(selectedDriver.vehicleType || '');
+    setPlateNumber(selectedDriver.vehicleDetails?.plateNumber || '');
+    setLicenseNumber(selectedDriver.vehicleDetails?.licenseNumber || '');
+    setidNumber(selectedDriver.idNumber || '');
+    setCapacityKg(selectedDriver.vehicleDetails?.capacityKg || '');
+    setModel(selectedDriver.vehicleDetails?.model || '');
+    setIsVerifiedDriver(selectedDriver.isVerifiedDriver ?? true);
+    setAvailableForJobs(selectedDriver.availableForJobs || true);
+    setPhoto(selectedDriver.photo || '');
+  }, [selectedDriver, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -83,23 +69,24 @@ const UpdateAccount = () => {
         photo
       };
 
+      console.log('Update driver ID',selectedDriver)
       await axios.put(
-        'https://tranzit.onrender.com/driver/Auth/driver',  // Assume this endpoint uses token to identify driver
+        `https://tranzit.onrender.com/driver/Auth/driver/${selectedDriver._id}`,
         data,
-        authHeader
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
       );
 
       toast.dismiss();
       toast.success('Driver updated successfully!');
-      navigate('/driver-dashboard'); // Or wherever driver should land after update
+      navigate('/driver-dashboard');
     } catch (error) {
       toast.dismiss();
       toast.error(error.response?.data?.message || 'Failed to update driver');
       console.error(error);
     }
   };
-
-  if (loading) return <div>Loading...</div>;
 
   return (
     <div className="container mt-4">
@@ -120,9 +107,150 @@ const UpdateAccount = () => {
           <i className="bi bi-pencil-square me-2"></i>Edit Profile
         </h5>
         <form onSubmit={handleSubmit}>
-          {/* ... all your inputs here, same as before ... */}
-          {/* I won't rewrite all inputs here, just keep your previous JSX */}
-          {/* ... */}
+          <div className="row">
+            <div className="col-md-6 mb-3">
+              <input
+                className="form-control"
+                placeholder="Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="col-md-6 mb-3">
+              <input
+                className="form-control"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+
+            <div className="col-md-6 mb-3">
+              <input
+                className="form-control"
+                placeholder="Phone"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
+            </div>
+
+            <div className="col-md-6 mb-3">
+              <input
+                className="form-control"
+                placeholder="Vehicle Type"
+                value={vehicleType}
+                onChange={(e) => setVehicleType(e.target.value)}
+              />
+            </div>
+
+            <div className="col-md-6 mb-3">
+              <input
+                className="form-control"
+                placeholder="Plate Number"
+                value={plateNumber}
+                onChange={(e) => setPlateNumber(e.target.value)}
+              />
+            </div>
+
+            <div className="col-md-6 mb-3">
+              <input
+                className="form-control"
+                placeholder="License Number"
+                value={licenseNumber}
+                onChange={(e) => setLicenseNumber(e.target.value)}
+              />
+            </div>
+
+            <div className="col-md-6 mb-3">
+              <input
+                className="form-control"
+                placeholder="ID Number"
+                value={idNumber}
+                onChange={(e) => setidNumber(e.target.value)}
+              />
+            </div>
+
+            <div className="col-md-6 mb-3">
+              <input
+                className="form-control"
+                placeholder="Capacity (kg)"
+                value={capacityKg}
+                onChange={(e) => setCapacityKg(e.target.value)}
+              />
+            </div>
+
+            <div className="col-md-6 mb-3">
+              <input
+                className="form-control"
+                placeholder="Model"
+                value={model}
+                onChange={(e) => setModel(e.target.value)}
+              />
+            </div>
+
+            <div className="col-md-6 mb-3">
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  checked={isVerifiedDriver}
+                  onChange={(e) => setIsVerifiedDriver(e.target.checked)}
+                />
+                <label className="form-check-label">Verified Driver</label>
+              </div>
+            </div>
+
+            <div className="col-md-6 mb-3">
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  checked={isPremium}
+                  onChange={(e) => setIsPremium(e.target.checked)}
+                />
+                <label className="form-check-label">Premium Driver</label>
+              </div>
+            </div>
+
+            <div className="col-md-6 mb-3">
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  checked={availableForJobs}
+                  onChange={(e) => setAvailableForJobs(e.target.checked)}
+                />
+                <label className="form-check-label">Available for Jobs</label>
+              </div>
+            </div>
+
+            <div className="col-md-6 mb-3">
+              <label>Profile Photo</label>
+              <input
+                type="file"
+                accept="image/*"
+                className="form-control"
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  if (file) {
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                      setPhoto(reader.result);
+                    };
+                    reader.readAsDataURL(file);
+                  }
+                }}
+              />
+              {photo && (
+                <div className="mt-2">
+                  <img src={photo} alt="Preview" className="driver-photo" style={{ height: '100px' }} />
+                </div>
+              )}
+            </div>
+          </div>
+
           <button type="submit" className="btn btn-success">
             <i className="bi bi-check-circle-fill me-2"></i>Update Profile
           </button>
