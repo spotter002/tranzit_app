@@ -23,7 +23,7 @@ import Deliveries from './components/admin/Deliveries';
 import Driver from './components/admin/Driver';
 import Shipper from './components/admin/Shipper';
 import Transactions from './components/admin/Transactions';
-import Wallet from './components/CreateWallet';
+import ownWallet from './components/ownWallet';
 import Featured from './components/admin/Featured';
 import AddDriver from './components/admin/forms/DriverAdd';
 import EditDriver from './components/admin/forms/DriverEdit';
@@ -33,7 +33,12 @@ import ShipperAdd from './components/admin/forms/ShipperAdd';
 import DriverCard from './components/admin/DriverCard';
 import WalletPayment from './components/WalletPayment';
 import CreateWallet from './components/CreateWallet';
-
+import DashBoardNavbar from './components/DashBoardNavbar';
+import OwnWallet from './components/ownWallet';
+import Rating from './components/driver/Rating';
+import bid from './components/driver/BidManager';
+import UpdateAccount from './components/driver/UpdateAccount';
+import BidManager from './components/driver/BidManager';
 // import NotAuthorized from './components/NotAuthorized';
 // import NotFound from './components/NotFoundController';
 
@@ -70,7 +75,7 @@ function App() {
         <Route path='shippers/edit' element={<EditShipper/>} />
 
         <Route path='transactions' element={<Transactions/>} />
-        <Route path='wallet' element={<Wallet/>} />
+        
         </Route>
 
         {/* shipper and admin protected routes */}
@@ -80,7 +85,7 @@ function App() {
 
         <Route path='' element={<ShipperDashboard/>} />
         <Route path='transactions' element={<Transactions/>} />
-        <Route path='wallet' element={<Wallet/>} />
+        
         </Route>
 
 
@@ -91,12 +96,17 @@ function App() {
 
         <Route path='' element={<DriverDasboard/>} />
         <Route path='transactions' element={<Transactions/>} />
-        <Route path='wallet' element={<Wallet/>} />
+        <Route path='update-Account' element={<UpdateAccount/>} />
+        <Route path='rating' element={<Rating/>} />
+        <Route path='bid' element={<BidManager/>} />
+
+        
         </Route>
 
 
         <Route path='/register' element={<RegisterComponent/>}/>
         <Route path='/login' element={<LoginComponent/>}/>
+        <Route path='/own-wallet' element={<OwnWallet/>} />
        <Route path='/walletPayment' element={<WalletPayment/>}/>
        <Route path='/transactions' element={<Transactions/>}/>
        <Route path='create-wallet' element={<CreateWallet/>} />

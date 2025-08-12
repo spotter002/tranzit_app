@@ -145,29 +145,7 @@ console.log('Update driver ID',selectedDriver._id)
               />
             </div>
 
-            <div className="col-md-6 mb-3">
-                  <label>Profile Photo</label>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="form-control"
-                    onChange={(e) => {
-                      const file = e.target.files[0];
-                      if (file) {
-                        const reader = new FileReader();
-                        reader.onloadend = () => {
-                          setPhoto(reader.result);
-                        };
-                        reader.readAsDataURL(file);
-                      }
-                    }}
-                  />
-                  {photo && (
-                    <div className="mt-2">
-                      <img src={photo} alt="Preview" className="driver-photo" />
-                    </div>
-                  )}
-                </div>
+         
 
 
             <div className="col-md-6 mb-3">
@@ -261,6 +239,30 @@ console.log('Update driver ID',selectedDriver._id)
                 <label className="form-check-label">Available for Jobs</label>
               </div>
             </div>
+
+               <div className="col-md-6 mb-3">
+                  <label>Profile Photo</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="form-control"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                          setPhoto(reader.result);
+                        };
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                  />
+                  {photo && (
+                    <div className="mt-2">
+                      <img src={photo} alt="Preview" className="driver-photo" />
+                    </div>
+                  )}
+                </div>
           </div>
 
           <button type="submit" className="btn btn-success">

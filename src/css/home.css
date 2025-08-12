@@ -80,3 +80,16 @@ footer {
     height: 280px;
   }
 }
+
+.sidebar {
+  position: fixed;   /* or sticky if you want */
+  top: 0;
+  left: 0;
+  height: 100vh;     /* full height */
+  overflow: hidden;  /* <-- prevents inner scrolling */
+}
+
+.sidebar {
+  overflow: hidden !important;
+}
+

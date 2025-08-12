@@ -87,7 +87,6 @@ const Transactions = () => {
                   <th>To Wallet</th>
                   <th>Platform Share</th>
                   <th>Driver Share</th>
-                  <th>Admin Share</th>
                   <th>Date</th>
                 </tr>
               </thead>
@@ -98,11 +97,18 @@ const Transactions = () => {
                     <td>{tx.type}</td>
                     <td>${tx.amount?.toFixed(2) || '0.00'}</td>
                     <td>{tx.status}</td>
-                    <td>{tx.fromWallet || 'N/A'}</td>
-                    <td>{tx.toWallet || 'N/A'}</td>
+                    <td>
+                      {tx.fromWallet 
+                        ? `${tx.fromWallet.name || 'Unknown'} (${tx.fromWallet.phone || 'No phone'})`
+                        : 'N/A'}
+                    </td>
+                    <td>
+                      {tx.toWallet 
+                        ? `${tx.toWallet.name || 'Unknown'} (${tx.toWallet.phone || 'No phone'})`
+                        : 'N/A'}
+                    </td>
                     <td>${(tx.platformShare || 0).toFixed(2)}</td>
                     <td>${(tx.driverShare || 0).toFixed(2)}</td>
-                    <td>${(tx.adminShare || 0).toFixed(2)}</td>
                     <td>{tx.createdAt ? new Date(tx.createdAt).toLocaleString() : 'N/A'}</td>
                   </tr>
                 ))}

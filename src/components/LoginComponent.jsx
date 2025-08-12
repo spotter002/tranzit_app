@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import "../css/register.css";
 import { FaEye, FaEyeSlash, FaGoogle } from 'react-icons/fa6';
+import { AuthContext } from '../context/AuthContext'; // adjust path
+
+
 
 const LoginComponent = () => {
   const [email, setEmail] = useState('');
@@ -12,6 +15,7 @@ const LoginComponent = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState('');
   const [success, setSuccess] = useState('');
+  const { setToken, setUser } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -20,10 +24,6 @@ const LoginComponent = () => {
     setError('');
     setSuccess('');
     setLoading('Logging in...');
-
-
-
-    localStorage.clear();
 
     
     try {
@@ -40,14 +40,23 @@ const LoginComponent = () => {
         throw new Error('Malformed response from server');
       }
 
+      console.log('Token:', token);
+      console.log('User:', user);
+
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
+        setToken(token);
+        setUser(user);
+
+      await checkWalletAndRedirect(user);
+
+
 
       setSuccess('Login successful!');
       setLoading('');
 
       // Perform wallet check & redirect after successful login
-      await checkWalletAndRedirect(user);
+      
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed');
       setLoading('');
@@ -56,6 +65,8 @@ const LoginComponent = () => {
 
   const checkWalletAndRedirect = async (user) => {
     try {
+
+
       const token = localStorage.getItem('token');
       if (!token) throw new Error("No auth token found");
 
@@ -77,7 +88,7 @@ const LoginComponent = () => {
     } catch (err) {
       console.error('Wallet check failed:', err);
       // Fallback: send to login
-      navigate('/login');
+      // navigate('/login');
     }
   };
 

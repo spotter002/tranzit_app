@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
-import DriverSidebar from '../driver/SideBar'
+import Sidebar from './SideBar'
+import DashBoardNavbar from '../DashBoardNavbar';
+
 
 const DriverLayout = () => {
   const [authStatus, setAuthStatus] = useState({ loading: true, error: '', authorized: false });
@@ -28,14 +30,20 @@ const DriverLayout = () => {
   if (authStatus.error) return <div className="alert alert-danger m-4">{authStatus.error}</div>;
 
   return (
-    <div className="d-flex">
-      <DriverSidebar />
-      <div className="flex-grow-1">
-        <main className="p-4 vh-100 overflow-auto">
-          <Outlet />
-        </main>
-      </div>
+   <div className="d-flex">
+    {/* Fixed sidebar */}
+    <div style={{ position: 'fixed', top: 0, left: 0, height: '100vh', zIndex: 1000 }}>
+      <Sidebar />
     </div>
+
+    {/* Main content shifted right */}
+    <div className="flex-grow-1 p-2" style={{ marginLeft: '150px' }}> 
+      <DashBoardNavbar />
+      <main className="p-2 vh-100 overflow-auto container-fluid">
+        <Outlet />
+      </main>
+    </div>
+  </div>
   );
 };
 

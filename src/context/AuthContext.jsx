@@ -15,7 +15,7 @@ const AuthProvider = ({children}) => {
         localStorage.clear()
         setToken('')
         setUser(null)
-        navigate('/login')
+        navigate('/')
     },[navigate])
 
     useEffect(() => {
