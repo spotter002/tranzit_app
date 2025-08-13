@@ -64,33 +64,38 @@ const LoginComponent = () => {
   };
 
   const checkWalletAndRedirect = async (user) => {
-    try {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) throw new Error("No auth token found");
 
+    const res = await axios.get(
+      'https://tranzit.onrender.com/transaction/Auth/get-wallet',
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
 
-      const token = localStorage.getItem('token');
-      if (!token) throw new Error("No auth token found");
+    const wallet = res.data.wallet || res.data;
 
-      const res = await axios.get('https://tranzit.onrender.com/transaction/Auth/auth/check-wallet', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-
-      const { isAdmin, hasWallet } = res.data;
-
-      if (isAdmin) {
-        navigate('/admin-dashboard');
-      } else if (!hasWallet) {
-        navigate('/create-wallet');
-      } else {
-        // Send user to role-based dashboard if wallet exists
-        const role = user.role.toLowerCase();
-        navigate(`/${role}-dashboard`);
-      }
-    } catch (err) {
-      console.error('Wallet check failed:', err);
-      // Fallback: send to login
-      // navigate('/login');
+    // Admin shortcut
+    if (user.isAdmin || user.role?.toLowerCase() === 'admin') {
+      navigate('/admin-dashboard');
+      return;
     }
-  };
+
+    // If wallet exists
+    if (wallet && wallet.name) {
+      const role = user.role?.toLowerCase() || 'user';
+      navigate(`/${role}-dashboard`);
+    } else {
+      // No wallet, go to create wallet page
+      navigate('/create-wallet');
+    }
+
+  } catch (err) {
+    console.error('Wallet check failed:', err);
+    navigate('/create-wallet'); // fallback
+  }
+};
+
 
   const handleSocialLogin = (provider) => {
     alert(`Social login with ${provider} coming soon! 🚀`);

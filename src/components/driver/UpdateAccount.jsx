@@ -18,7 +18,7 @@ const UpdateAccount = () => {
   const [vehicleType, setVehicleType] = useState('');
   const [capacityKg, setCapacityKg] = useState('');
   const [model, setModel] = useState('');
-  const [isVerifiedDriver, setIsVerifiedDriver] = useState(false);
+  // const [isVerifiedDriver, setIsVerifiedDriver] = useState(false);
   const [availableForJobs, setAvailableForJobs] = useState(false);
   const [idNumber, setidNumber] = useState('');
   const [licenseNumber, setLicenseNumber] = useState('');
@@ -38,11 +38,11 @@ const UpdateAccount = () => {
     setIsPremium(selectedDriver.isPremium || false);
     setVehicleType(selectedDriver.vehicleType || '');
     setPlateNumber(selectedDriver.vehicleDetails?.plateNumber || '');
-    setLicenseNumber(selectedDriver.vehicleDetails?.licenseNumber || '');
+    setLicenseNumber(selectedDriver.licenseNumber || '');
     setidNumber(selectedDriver.idNumber || '');
     setCapacityKg(selectedDriver.vehicleDetails?.capacityKg || '');
     setModel(selectedDriver.vehicleDetails?.model || '');
-    setIsVerifiedDriver(selectedDriver.isVerifiedDriver ?? true);
+    // setIsVerifiedDriver(selectedDriver.isVerifiedDriver ?? true);
     setAvailableForJobs(selectedDriver.availableForJobs || true);
     setPhoto(selectedDriver.photo || '');
   }, [selectedDriver, navigate]);
@@ -63,7 +63,7 @@ const UpdateAccount = () => {
         },
         licenseNumber,
         idNumber,
-        isVerifiedDriver,
+        // isVerifiedDriver,
         isPremium,
         availableForJobs,
         photo
@@ -190,7 +190,7 @@ const UpdateAccount = () => {
               />
             </div>
 
-            <div className="col-md-6 mb-3">
+            {/* <div className="col-md-6 mb-3">
               <div className="form-check">
                 <input
                   className="form-check-input"
@@ -200,7 +200,7 @@ const UpdateAccount = () => {
                 />
                 <label className="form-check-label">Verified Driver</label>
               </div>
-            </div>
+            </div> */}
 
             <div className="col-md-6 mb-3">
               <div className="form-check">

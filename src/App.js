@@ -39,6 +39,12 @@ import Rating from './components/driver/Rating';
 import bid from './components/driver/BidManager';
 import UpdateAccount from './components/driver/UpdateAccount';
 import BidManager from './components/driver/BidManager';
+import About from './components/About';
+import Settings from './components/Settings';
+import Review from './components/Review';
+import PostJob from './components/shipper/PostJob';
+import UpdateShipper from './components/shipper/UpdateShipper';
+import RateDriver from './components/shipper/RateDriver';
 // import NotAuthorized from './components/NotAuthorized';
 // import NotFound from './components/NotFoundController';
 
@@ -84,8 +90,10 @@ function App() {
         </ProtectedRoutes>}>
 
         <Route path='' element={<ShipperDashboard/>} />
+        <Route path='post-delivery' element={<PostJob/>} />
+        <Route path='rate-driver' element={<RateDriver/>} />
+        <Route path='update-Account' element={<UpdateShipper/>} />
         <Route path='transactions' element={<Transactions/>} />
-        
         </Route>
 
 
@@ -109,7 +117,11 @@ function App() {
         <Route path='/own-wallet' element={<OwnWallet/>} />
        <Route path='/walletPayment' element={<WalletPayment/>}/>
        <Route path='/transactions' element={<Transactions/>}/>
-       <Route path='create-wallet' element={<CreateWallet/>} />
+       <Route path='/create-wallet' element={<CreateWallet/>} />
+       <Route path='/about' element={<About/>} />
+       <Route path='/settings' element={<Settings/>} />
+       <Route path='/review' element={<Review/>} />
+      
 
         {/* <Route path='/forgot-password' element={<ForgotPasswordComponent/>}/> */}
         {/* default routes */}

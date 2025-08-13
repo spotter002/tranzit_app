@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import ShipperSidebar from '../shipper/SideBar';
+import DashBoardNavbar from '../DashBoardNavbar';
 
 const ShipperLayout = () => {
   const [authStatus, setAuthStatus] = useState({ loading: true, error: '', authorized: false });
@@ -31,6 +32,7 @@ const ShipperLayout = () => {
     <div className="d-flex">
       <ShipperSidebar />
       <div className="flex-grow-1">
+        <DashBoardNavbar />
         <main className="p-4 vh-100 overflow-auto">
           <Outlet />
         </main>
