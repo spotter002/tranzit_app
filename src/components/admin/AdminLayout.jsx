@@ -31,7 +31,7 @@ const AdminLayout = () => {
   if (authStatus.error) return <div className="alert alert-danger m-4">{authStatus.error}</div>;
 
   return (
-  <div className="d-flex">
+ <div className="d-flex">
     {/* Fixed sidebar */}
     <div style={{ position: 'fixed', top: 0, left: 0, height: '100vh', zIndex: 1000 }}>
       <SideBar />
@@ -46,7 +46,6 @@ const AdminLayout = () => {
     </div>
   </div>
 );
-
 };
 
 export default AdminLayout;

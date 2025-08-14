@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import Sidebar from './SideBar'
 import DashBoardNavbar from '../DashBoardNavbar';
+import SideBar from './SideBar';
 
 
 const DriverLayout = () => {
@@ -30,10 +31,10 @@ const DriverLayout = () => {
   if (authStatus.error) return <div className="alert alert-danger m-4">{authStatus.error}</div>;
 
   return (
-   <div className="d-flex">
+    <div className="d-flex">
     {/* Fixed sidebar */}
     <div style={{ position: 'fixed', top: 0, left: 0, height: '100vh', zIndex: 1000 }}>
-      <Sidebar />
+      <SideBar />
     </div>
 
     {/* Main content shifted right */}

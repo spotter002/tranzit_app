@@ -45,7 +45,7 @@ const SideBar = () => {
         overflow: 'hidden',
         background: 'linear-gradient(135deg, rgb(12,79,46), rgb(54,66,159))',
         transition: 'width 0.3s',
-        height: '850px',
+        height: '100vh',
         // position: 'fixed'
       }}
     >

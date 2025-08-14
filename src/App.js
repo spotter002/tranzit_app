@@ -22,7 +22,7 @@ import Bid from './components/admin/Bid';
 import Deliveries from './components/admin/Deliveries';
 import Driver from './components/admin/Driver';
 import Shipper from './components/admin/Shipper';
-import Transactions from './components/admin/Transactions';
+import Transactions from './components/Transactions';
 import ownWallet from './components/ownWallet';
 import Featured from './components/admin/Featured';
 import AddDriver from './components/admin/forms/DriverAdd';
@@ -45,6 +45,7 @@ import Review from './components/Review';
 import PostJob from './components/shipper/PostJob';
 import UpdateShipper from './components/shipper/UpdateShipper';
 import RateDriver from './components/shipper/RateDriver';
+import FullScreenMapPicker from './components/FullScreenMapPicker';
 // import NotAuthorized from './components/NotAuthorized';
 // import NotFound from './components/NotFoundController';
 
@@ -116,6 +117,7 @@ function App() {
         <Route path='/login' element={<LoginComponent/>}/>
         <Route path='/own-wallet' element={<OwnWallet/>} />
        <Route path='/walletPayment' element={<WalletPayment/>}/>
+       <Route path="/map-picker" element={<FullScreenMapPicker />} />
        <Route path='/transactions' element={<Transactions/>}/>
        <Route path='/create-wallet' element={<CreateWallet/>} />
        <Route path='/about' element={<About/>} />

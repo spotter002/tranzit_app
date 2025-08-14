@@ -3,17 +3,21 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { AuthContext } from '../../context/AuthContext';
+import { AuthContext } from '../context/AuthContext';
 
 const Transactions = () => {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const { token } = useContext(AuthContext);
+  const { token , user } = useContext(AuthContext);
 
   const authHeader = {
     headers: { Authorization: `Bearer ${token}` }
   };
+ const userRole = user.role.toLowerCase();
+
+ console.log('userRole',userRole)
+ const ownerLink = `/${userRole}-dashboard`
 
   const fetchTransactions = async () => {
     try {
@@ -50,7 +54,7 @@ const Transactions = () => {
 
       <nav aria-label="breadcrumb" className="mb-3">
         <ol className="breadcrumb">
-          <li className="breadcrumb-item fw-bold"><Link to="/admin-dashboard">Dashboard</Link></li>
+          <li className="breadcrumb-item fw-bold"><Link to={ownerLink}>Dashboard</Link></li>
           <li className="breadcrumb-item active fw-bold" aria-current="page">Transactions</li>
         </ol>
       </nav>

@@ -5,6 +5,7 @@ import {
   FaUserEdit,
   FaWallet,
   FaGavel,
+  FaExchangeAlt,
   FaStar,
   FaCog,
   FaTachometerAlt,
@@ -84,6 +85,10 @@ const SideBar = () => {
           <FaStar color={iconColors.rating} size={iconSize} className="me-2" />
           {!collapsed && 'See Rating'}
         </NavLink>
+        <NavLink to='/driver-dashboard/transactions' style={linkStyle} className='text-light'>
+                  <FaExchangeAlt color={iconColors.transactions} size={iconSize} className="me-2" />
+                  {!collapsed && 'Transactions'}
+                </NavLink>
       </div>
 
       {/* Bottom actions */}

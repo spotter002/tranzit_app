@@ -54,7 +54,7 @@ const SideBar = () => {
         overflow: 'hidden',
         background: 'linear-gradient(135deg, rgb(12,79,46), rgb(54,66,159))',
         transition: 'width 0.3s',
-        height: '850px',
+        height: '100vh',
       }}
     >
       {/* Top menu items */}
@@ -82,10 +82,10 @@ const SideBar = () => {
           <FaStarHalfAlt color={iconColors.rateDriver} size={iconSize} className="me-2" />
           {!collapsed && 'Rate Driver'}
         </NavLink>
-        <NavLink to='/shipper-dashboard/update-Account' style={linkStyle} className='text-light'>
+        {/* <NavLink to='/shipper-dashboard/update-Account' style={linkStyle} className='text-light'>
           <FaUserEdit color={iconColors.updateAccount} size={iconSize} className="me-2" />
           {!collapsed && 'Update Account'}
-        </NavLink>
+        </NavLink> */}
         <NavLink to='/own-wallet' style={linkStyle} className='text-light'>
                   <FaWallet color={iconColors.wallet} size={iconSize} className="me-2" />
                   {!collapsed && 'View Wallet'}

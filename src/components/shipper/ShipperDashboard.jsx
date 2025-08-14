@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { FaUserEdit } from 'react-icons/fa';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -42,15 +44,15 @@ const StatCard = ({ title, value, color, icon }) => (
   </div>
 );
 
-const RecentList = ({ title, items, renderItem }) => (
+const RecentList = ({ title, items = [], renderItem }) => (
   <div className="card mb-4 shadow-sm h-100">
     <div className="card-header bg-primary text-white">{title}</div>
     <ul className="list-group list-group-flush">
       {items.length === 0 ? (
-        <li className="list-group-item text-muted">No recent {title.toLowerCase()} found.</li>
+        <li className="list-group-item text-muted">No {title.toLowerCase()} found.</li>
       ) : (
-        items.map(item => (
-          <li key={item._id} className="list-group-item">
+        items.map((item, idx) => (
+          <li key={idx} className="list-group-item">
             {renderItem(item)}
           </li>
         ))
@@ -59,37 +61,66 @@ const RecentList = ({ title, items, renderItem }) => (
   </div>
 );
 
-const ShipperDashboard = () => {
+const ShipperDashboard = ({ collapsed }) => {
   const [data, setData] = useState(null);
+  const [shipper, setShipper] = useState(null);
   const [loading, setLoading] = useState('Loading shipper dashboard...');
   const [error, setError] = useState('');
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const shipperId = user._id;
+    console.log('Shipper ID:', shipperId);
 
-    const fetchDashboard = async () => {
-      try {
-        const res = await axios.get(
-          `https://tranzit.onrender.com/dashboard/Auth/shipper`,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
+    if (!shipperId) {
+      setError('Shipper ID not found. Please login again.');
+      setLoading('');
+      return;
+    }
+
+    // Dashboard data
+    axios.get('https://tranzit.onrender.com/dashboard/Auth/shipper', {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(res => {
         setData(res.data);
         setLoading('');
-      } catch (err) {
-        console.error(err);
+      })
+      .catch(() => {
         setError('Failed to load shipper dashboard');
         setLoading('');
-      }
-    };
+      });
 
-    fetchDashboard();
+    // Shipper details
+    axios.get(`https://tranzit.onrender.com/shipper/Auth/${shipperId}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(res => {
+        setShipper(res.data);
+        setLoading('');
+      })
+      .catch(() => {
+        setError('Failed to load shipper details');
+        setLoading('');
+      });
   }, []);
+
+  const handleUpdateClick = () => {
+    if (shipper) {
+      navigate('/shipper-dashboard/update-Account', { state: { shipperData: shipper } });
+    }
+  };
+
+  console.log('Data:', data);
+  console.log('Shipper:', shipper);
 
   if (loading) return <div className="alert alert-info mt-4">{loading}</div>;
   if (error) return <div className="alert alert-danger mt-4">{error}</div>;
-  if (!data) return null;
+  if (!data || !shipper) return null;
 
-  // Chart data
   const deliveryLabels = data.deliveryStatsByDate.map(d => d._id);
   const deliveriesData = {
     labels: deliveryLabels,
@@ -126,10 +157,29 @@ const ShipperDashboard = () => {
     <div className="container my-4">
       <h2 className="mb-4 text-info">📦 Shipper Dashboard</h2>
 
+      {/* Shipper Details */}
+      <div className="card mb-4 shadow-sm p-3 text-muted">
+        <h5 className="mb-3">Shipper Details</h5>
+        <p><strong>Name:</strong> {shipper.name}</p>
+        <p><strong>Email:</strong> {shipper.email}</p>
+        <p><strong>Phone:</strong> {shipper.phone}</p>
+        <p><strong>Company:</strong> {shipper.companyName || 'N/A'}</p>
+        <p><strong>Location:</strong> {shipper.location || 'N/A'}</p>
+        <p><strong>Verified:</strong> {shipper.isVerified ? 'Yes' : 'No'}</p>
+
+        <button
+          type="button"
+          className="btn btn-primary d-flex align-items-center w-80 mt-3"
+          onClick={handleUpdateClick}
+        >
+          <FaUserEdit size={18} className="me-2" />
+          {!collapsed && 'Update Shipper'}
+        </button>
+      </div>
+
       {/* Stat cards */}
       <div className="row">
         <StatCard title="Wallet Balance" value={`KSh ${data.walletBalance.toLocaleString()}`} color="success" icon="bi-wallet2" />
-        <StatCard title="Total Earnings" value={`KSh ${data.totalEarnings.toLocaleString()}`} color="primary" icon="bi-cash-coin" />
         <StatCard title="Last Month Earnings" value={`KSh ${data.lastMonthEarnings.toLocaleString()}`} color="warning" icon="bi-calendar-event" />
         <StatCard title="Completion Rate" value={data.completionRate} color="info" icon="bi-bar-chart" />
         <StatCard title="Total Completed" value={data.totalCompleted} color="secondary" icon="bi-check-circle" />
