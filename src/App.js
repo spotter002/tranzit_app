@@ -46,6 +46,9 @@ import PostJob from './components/shipper/PostJob';
 import UpdateShipper from './components/shipper/UpdateShipper';
 import RateDriver from './components/shipper/RateDriver';
 import FullScreenMapPicker from './components/FullScreenMapPicker';
+import ViewJobBids from './components/shipper/ViewJobBids';
+import DriverBids from './components/driver/DriverBids';
+import JobBids from './components/driver/JobBids';
 // import NotAuthorized from './components/NotAuthorized';
 // import NotFound from './components/NotFoundController';
 
@@ -93,6 +96,7 @@ function App() {
         <Route path='' element={<ShipperDashboard/>} />
         <Route path='post-delivery' element={<PostJob/>} />
         <Route path='rate-driver' element={<RateDriver/>} />
+        <Route path='post-delivery/view-job-bids/:jobId' element={<ViewJobBids/>} />
         <Route path='update-Account' element={<UpdateShipper/>} />
         <Route path='transactions' element={<Transactions/>} />
         </Route>
@@ -107,7 +111,9 @@ function App() {
         <Route path='transactions' element={<Transactions/>} />
         <Route path='update-Account' element={<UpdateAccount/>} />
         <Route path='rating' element={<Rating/>} />
-        <Route path='bid' element={<BidManager/>} />
+        <Route path="job-bids/:jobId" element={<JobBids />} />
+        <Route path='bid-manager/:bidId' element={<BidManager/>} />
+        <Route path='bid' element={<DriverBids/>} />
 
         
         </Route>

@@ -24,7 +24,6 @@ const PostJob = () => {
   const [deliveries, setDeliveries] = useState([]);
   const [editId, setEditId] = useState(null);
 
-  // Set user email & fetch deliveries
   useEffect(() => {
     if (user?.email) {
       setFormData((prev) => ({ ...prev, shipperEmail: user.email }));
@@ -32,7 +31,6 @@ const PostJob = () => {
     }
   }, [user]);
 
-  // Merge location/state from map picker back into formData
   useEffect(() => {
     if (loc.state) {
       setFormData((prev) => ({ ...prev, ...loc.state }));
@@ -286,6 +284,25 @@ const PostJob = () => {
                   <strong>Special Instructions:</strong>{" "}
                   {delivery.specialInstructions || "None"}
                 </div>
+                <div className="mb-2">
+                  <strong>Status:</strong>{" "}
+                  <span
+                    className={`badge ${
+                      delivery.status === "posted"
+                        ? "bg-secondary"
+                        : delivery.status === "assigned"
+                        ? "bg-info"
+                        : delivery.status === "picked_up"
+                        ? "bg-warning text-dark"
+                        : delivery.status === "delivered"
+                        ? "bg-success"
+                        : "bg-danger"
+                    }`}
+                  >
+                    {delivery.status}
+                  </span>
+                </div>
+
                 <div className="d-flex justify-content-end mt-2">
                   <button
                     onClick={() => handleEdit(delivery)}
@@ -295,11 +312,23 @@ const PostJob = () => {
                   </button>
                   <button
                     onClick={() => handleDelete(delivery._id)}
-                    className="btn btn-danger btn-sm"
+                    className="btn btn-danger btn-sm me-2"
                   >
                     Delete
                   </button>
+                  <button
+                    onClick={() =>
+                      navigate(
+                        `/shipper-dashboard/post-delivery/view-job-bids/${delivery._id}`,
+                        { state: { job: delivery } } // optional, handy if you want job details without re-fetch
+                      )
+                    }
+                    className="btn btn-info btn-sm"
+                  >
+                    View Bids
+                  </button>
                 </div>
+
               </li>
             ))}
           </ul>
